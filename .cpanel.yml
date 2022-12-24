@@ -1,0 +1,24 @@
+---
+deployment:
+  tasks:
+    - |
+      if [ ! -f .deploy.sh ]
+      then
+          cp .deploy.example.sh .deploy.sh
+          exit
+      else
+          source .deploy.sh
+      fi
+    
+    - mkdir -p $DEPLOYPATH
+
+    - |
+      find -mindepth 1 -maxdepth 1 \
+        -exec rm -rf $DEPLOYPATH/{} \;
+    - |
+      find -mindepth 1 -maxdepth 1 \
+        ! -name ".git" \
+        ! -name ".cpanel.yml" \
+        ! -name ".deploy.example.sh" \
+        ! -name ".deploy.sh" \
+        -exec cp -R -t $DEPLOYPATH {} +
